@@ -9,7 +9,7 @@
 # Bureau — Beautiful, Opinionated Fedora for Creatives & Designers
 # Bauhaus-inspired. Claude-powered. Made for makers.
 #
-# Usage: bash <(curl -fsSL https://raw.githubusercontent.com/YOUR_REPO/bureau/main/install.sh)
+# Usage: bash <(curl -fsSL https://raw.githubusercontent.com/chrischrisjnr/bureau/main/install.sh)
 # ============================================================================
 
 set -euo pipefail
@@ -27,7 +27,7 @@ BOLD='\033[1m'
 BUREAU_DIR="$HOME/.local/share/bureau"
 BUREAU_CONFIG="$HOME/.config/bureau"
 BUREAU_VERSION="1.0.0"
-REPO_URL="https://github.com/YOUR_REPO/bureau"
+REPO_URL="https://github.com/chrischrisjnr/bureau"
 
 # ============================================================================
 # Helper Functions

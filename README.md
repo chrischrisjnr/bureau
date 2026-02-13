@@ -13,7 +13,7 @@ Inspired by [Omarchy](https://omarchy.org) and [Omakub](https://omakub.org), but
 On a fresh Fedora Workstation install, open a terminal and run:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/YOUR_REPO/bureau/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/chrischrisjnr/bureau/main/install.sh)
 ```
 
 That's it. One command. Go make a coffee — it'll take 15-20 minutes.

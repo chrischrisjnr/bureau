@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bureau — Beautiful, Opinionated Linux for Creatives</title>
+    <meta name="description" content="Bureau transforms Fedora into a fully-configured creative workstation. Bauhaus-inspired. Claude-powered. Made for makers.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================================
+           Bureau Landing Page — Bauhaus Design System
+           Palette: #be1e2d (red), #21409a (blue), #f2c12e (yellow)
+           Background: #0e0e0e / Foreground: #e8e4de
+           ============================================================ */
+
+        :root {
+            --red: #be1e2d;
+            --blue: #21409a;
+            --yellow: #f2c12e;
+            --black: #0e0e0e;
+            --dark: #1a1a1a;
+            --surface: #212121;
+            --warm-white: #e8e4de;
+            --grey: #888;
+            --dim: #555;
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --font-mono: 'DM Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--warm-white);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background: var(--blue);
+            color: white;
+        }
+
+        /* ============================================================
+           Bauhaus Grid Overlay (decorative background)
+           ============================================================ */
+
+        .grid-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(var(--warm-white) 1px, transparent 1px),
+                linear-gradient(90deg, var(--warm-white) 1px, transparent 1px);
+            background-size: 120px 120px;
+        }
+
+        /* ============================================================
+           Navigation
+           ============================================================ */
+
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(14, 14, 14, 0.8);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: -0.02em;
+            color: var(--warm-white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-logo .dot {
+            width: 10px;
+            height: 10px;
+            background: var(--red);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--grey);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: color 0.2s;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links a:hover {
+            color: var(--warm-white);
+        }
+
+        .nav-cta {
+            background: var(--warm-white) !important;
+            color: var(--black) !important;
+            padding: 0.6rem 1.4rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: white !important;
+            transform: translateY(-1px);
+        }
+
+        /* ============================================================
+           Hero Section
+           ============================================================ */
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 3rem 4rem;
+            overflow: hidden;
+        }
+
+        /* Bauhaus geometric elements */
+        .hero-geo {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero-circle {
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: var(--red);
+            opacity: 0.08;
+            top: -100px;
+            right: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .hero-rect {
+            width: 300px;
+            height: 400px;
+            background: var(--blue);
+            opacity: 0.06;
+            bottom: 50px;
+            left: -80px;
+            transform: rotate(-12deg);
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        .hero-triangle {
+            width: 0; height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 260px solid var(--yellow);
+            opacity: 0.05;
+            top: 40%;
+            right: 15%;
+            animation: float 30s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(2deg); }
+            66% { transform: translateY(10px) rotate(-1deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--grey);
+            margin-bottom: 2.5rem;
+            font-family: var(--font-mono);
+            animation: fadeInUp 0.8s ease both;
+        }
+
+        .hero-badge .pip {
+            width: 6px;
+            height: 6px;
+            background: var(--yellow);
+            border-radius: 50%;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            line-height: 0.95;
+            letter-spacing: -0.04em;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        h1 .accent-red { color: var(--red); }
+        h1 .accent-blue { color: var(--blue); }
+        h1 .accent-yellow { color: var(--yellow); }
+
+        .hero-sub {
+            font-size: 1.25rem;
+            color: var(--grey);
+            max-width: 560px;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: var(--warm-white);
+            color: var(--black);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.25s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255,255,255,0.1);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: transparent;
+            color: var(--warm-white);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.25s;
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.04);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           Install Command Banner
+           ============================================================ */
+
+        .install-banner {
+            position: relative;
+            z-index: 2;
+            padding: 0 3rem;
+            margin-top: -2rem;
+            margin-bottom: 6rem;
+        }
+
+        .install-box {
+            max-width: 900px;
+            background: var(--surface);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .install-box code {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            color: var(--yellow);
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+
+        .install-box .copy-btn {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--grey);
+            padding: 0.5rem 1.2rem;
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .install-box .copy-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--warm-white);
+        }
+
+        /* ============================================================
+           Colour Bar Divider (Bauhaus stripe)
+           ============================================================ */
+
+        .bauhaus-stripe {
+            height: 4px;
+            display: flex;
+            width: 100%;
+        }
+
+        .bauhaus-stripe .s-red { flex: 1; background: var(--red); }
+        .bauhaus-stripe .s-blue { flex: 1; background: var(--blue); }
+        .bauhaus-stripe .s-yellow { flex: 1; background: var(--yellow); }
+
+        /* ============================================================
+           Section Styling
+           ============================================================ */
+
+        section {
+            position: relative;
+            z-index: 2;
+            padding: 6rem 3rem;
+        }
+
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--dim);
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-desc {
+            color: var(--grey);
+            font-size: 1.1rem;
+            max-width: 600px;
+            line-height: 1.7;
+            font-weight: 300;
+            margin-bottom: 3rem;
+        }
+
+        /* ============================================================
+           Creative Suite Grid
+           ============================================================ */
+
+        .suite-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 12px;
+            overflow: hidden;
+            max-width: 1200px;
+        }
+
+        .suite-card {
+            background: var(--dark);
+            padding: 2rem;
+            transition: background 0.3s;
+        }
+
+        .suite-card:hover {
+            background: var(--surface);
+        }
+
+        .suite-card .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .suite-card h3 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1.15rem;
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.01em;
+        }
+
+        .suite-card .replaces {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--dim);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.6rem;
+        }
+
+        .suite-card p {
+            color: var(--grey);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* ============================================================
+           Features Section
+           ============================================================ */
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+        }
+
+        .feature-card {
+            padding: 2.5rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .fi-red { background: rgba(190, 30, 45, 0.15); }
+        .fi-blue { background: rgba(33, 64, 154, 0.2); }
+        .fi-yellow { background: rgba(242, 193, 46, 0.15); }
+
+        .feature-card h3 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .feature-card p {
+            color: var(--grey);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ============================================================
+           Terminal Preview
+           ============================================================ */
+
+        .terminal-section {
+            max-width: 900px;
+        }
+
+        .terminal-window {
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .terminal-header {
+            padding: 0.8rem 1.2rem;
+            background: rgba(255,255,255,0.03);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .td-red { background: var(--red); }
+        .td-yellow { background: var(--yellow); }
+        .td-blue { background: var(--blue); }
+
+        .terminal-body {
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .terminal-body .prompt {
+            color: var(--blue);
+        }
+
+        .terminal-body .cmd {
+            color: var(--warm-white);
+        }
+
+        .terminal-body .output {
+            color: var(--dim);
+        }
+
+        .terminal-body .highlight {
+            color: var(--yellow);
+        }
+
+        .terminal-body .success {
+            color: #4a9e6d;
+        }
+
+        /* ============================================================
+           Philosophy Quote
+           ============================================================ */
+
+        .philosophy {
+            padding: 8rem 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .philosophy blockquote {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .philosophy cite {
+            font-family: var(--font-mono);
+            font-style: normal;
+            font-size: 0.85rem;
+            color: var(--dim);
+            letter-spacing: 0.05em;
+        }
+
+        /* ============================================================
+           Footer
+           ============================================================ */
+
+        footer {
+            position: relative;
+            z-index: 2;
+            padding: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        footer .footer-left {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--dim);
+        }
+
+        footer .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        footer .footer-links a {
+            color: var(--dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        footer .footer-links a:hover {
+            color: var(--warm-white);
+        }
+
+        /* ============================================================
+           Scroll Animations
+           ============================================================ */
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================================
+           Responsive
+           ============================================================ */
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .hero { padding: 7rem 1.5rem 3rem; }
+            section { padding: 4rem 1.5rem; }
+            .install-banner { padding: 0 1.5rem; }
+            .install-box { flex-direction: column; align-items: flex-start; }
+            .install-box code { font-size: 0.75rem; }
+            .philosophy { padding: 5rem 1.5rem; }
+            footer { padding: 2rem 1.5rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .suite-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2.8rem; }
+            .hero-actions { flex-direction: column; align-items: stretch; }
+            .btn-primary, .btn-secondary { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="nav-logo">
+            <span class="dot"></span>
+            Bureau
+        </a>
+        <div class="nav-links">
+            <a href="#suite">Creative Suite</a>
+            <a href="#features">Features</a>
+            <a href="#terminal">Terminal</a>
+            <a href="https://github.com/chrischrisjnr/bureau" class="nav-cta">GitHub →</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-geo hero-circle"></div>
+        <div class="hero-geo hero-rect"></div>
+        <div class="hero-geo hero-triangle"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pip"></span>
+                Fedora + GNOME · Bauhaus-inspired · Claude-powered
+            </div>
+            <h1>
+                Linux for<br>
+                <span class="accent-red">crea</span><span class="accent-blue">tive</span><span class="accent-yellow">s.</span>
+            </h1>
+            <p class="hero-sub">
+                Bureau transforms Fedora into a fully-configured creative workstation. 
+                One command. Every tool you need. Nothing you don't.
+            </p>
+            <div class="hero-actions">
+                <a href="#install" class="btn-primary">
+                    Install Bureau
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+                <a href="https://github.com/chrischrisjnr/bureau" class="btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Install Command -->
+    <div class="install-banner" id="install">
+        <div class="install-box reveal">
+            <code>bash &lt;(curl -fsSL https://raw.githubusercontent.com/chrischrisjnr/bureau/main/install.sh)</code>
+            <button class="copy-btn" onclick="copyInstall()">Copy</button>
+        </div>
+    </div>
+
+    <div class="bauhaus-stripe">
+        <div class="s-red"></div>
+        <div class="s-blue"></div>
+        <div class="s-yellow"></div>
+    </div>
+
+    <!-- Creative Suite -->
+    <section id="suite">
+        <div class="section-label reveal">01 — Creative Suite</div>
+        <h2 class="reveal">Every tool.<br>Pre-installed.</h2>
+        <p class="section-desc reveal">
+            From photo editing to 3D rendering, Bureau ships with a complete creative 
+            toolkit — configured and ready to use the moment you log in.
+        </p>
+        <div class="suite-grid reveal">
+            <div class="suite-card">
+                <span class="card-icon">🖌️</span>
+                <h3>GIMP</h3>
+                <div class="replaces">Replaces Photoshop</div>
+                <p>Photo editing, retouching, compositing, and manipulation.</p>
+            </div>
+            <div class="suite-card">
+                <span class="card-icon">✏️</span>
+                <h3>Inkscape</h3>
+                <div class="replaces">Replaces Illustrator</div>
+                <p>Vector graphics, logos, icons, and scalable illustrations.</p>
+            </div>
+            <div class="suite-card">
+                <span class="card-icon">🎨</span>
+                <h3>Krita</h3>
+                <div class="replaces">Replaces Procreate</div>
+                <p>Digital painting, illustration, concept art, and comics.</p>
+            </div>
+            <div class="suite-card">
+                <span class="card-icon">🧊</span>
+                <h3>Blender</h3>
+                <div class="replaces">Replaces Cinema 4D</div>
+                <p>3D modelling, animation, rendering, and motion graphics.</p>
+            </div>
+            <div class="suite-card">
+                <span class="card-icon">📷</span>
+                <h3>Darktable</h3>
+                <div class="replaces">Replaces Lightroom</div>
+                <p>RAW photo processing, colour grading, and catalogue management.</p>
+            </div>
+            <div class="suite-card">
+                <span class="card-icon">📐</span>
+                <h3>Scribus</h3>
+                <div class="replaces">Replaces InDesign</div>
+                <p>Desktop publishing, page layout, and print preparation.</p>
+            </div>
+            <div class="suite-card">
+                <span class="card-icon">🎬</span>
+                <h3>Kdenlive</h3>
+                <div class="replaces">Replaces Premiere</div>
+                <p>Video editing, multi-track timeline, and colour correction.</p>
+            </div>
+            <div class="suite-card">
+                <span class="card-icon">🔲</span>
+                <h3>Figma</h3>
+                <div class="replaces">Pinned Web App</div>
+                <p>UI/UX design, prototyping, and collaborative design.</p>
+            </div>
+            <div class="suite-card">
+                <span class="card-icon">🤖</span>
+                <h3>Claude</h3>
+                <div class="replaces">AI Assistant</div>
+                <p>Creative copilot — brainstorm, write, code, and automate.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+        <div class="section-label reveal">02 — Features</div>
+        <h2 class="reveal">Built for how<br>you actually work.</h2>
+        <p class="section-desc reveal">
+            Every default has been chosen to reduce friction between you and your creativity.
+        </p>
+        <div class="features-grid">
+            <div class="feature-card reveal">
+                <div class="feature-icon fi-red">🧠</div>
+                <h3>Claude-Powered</h3>
+                <p>Claude AI pinned in your dock. Claude Code in your terminal. 
+                   <code style="font-family:var(--font-mono);color:var(--yellow);font-size:0.85em">bureau-ask</code> for instant creative help from the command line.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon fi-blue">🎨</div>
+                <h3>Bauhaus Theme</h3>
+                <p>Warm dark mode with red, blue, and yellow accents. GTK4 colour 
+                   overrides that flow through every app. Light mode included.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon fi-yellow">🔤</div>
+                <h3>30+ Font Families</h3>
+                <p>Inter, DM Sans, Space Grotesk, IBM Plex, JetBrains Mono, Syne, 
+                   Work Sans, and more. A designer's type library, pre-loaded.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon fi-red">✏️</div>
+                <h3>Tablet Support</h3>
+                <p>Wacom drivers out of the box. Pressure sensitivity, tilt, and 
+                   button mapping through GNOME Settings. OpenTabletDriver for Huion/XP-Pen.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon fi-blue">🎯</div>
+                <h3>Colour Management</h3>
+                <p>ICC profile support, display calibration tools, and Night Light 
+                   enabled by default. Print-ready colour accuracy.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon fi-yellow">🍷</div>
+                <h3>Affinity via Bottles</h3>
+                <p>Bottles pre-installed for running Windows apps. Setup guide included 
+                   for Affinity Designer, Photo, and Publisher.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="bauhaus-stripe">
+        <div class="s-yellow"></div>
+        <div class="s-red"></div>
+        <div class="s-blue"></div>
+    </div>
+
+    <!-- Terminal Preview -->
+    <section id="terminal">
+        <div class="section-label reveal">03 — Terminal</div>
+        <h2 class="reveal">Creative shortcuts<br>at your fingertips.</h2>
+        <p class="section-desc reveal">
+            Bureau adds creative aliases, batch image tools, and a Claude-powered 
+            assistant to your terminal.
+        </p>
+        <div class="terminal-section reveal">
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="terminal-dot td-red"></div>
+                    <div class="terminal-dot td-yellow"></div>
+                    <div class="terminal-dot td-blue"></div>
+                </div>
+                <div class="terminal-body">
+                    <span class="prompt">▸</span> <span class="cmd">bureau apps</span><br>
+                    <br>
+                    <span class="output">Bureau Creative Suite:</span><br>
+                    <br>
+                    <span class="success">  ✓</span> <span class="output">gimp</span><br>
+                    <span class="success">  ✓</span> <span class="output">inkscape</span><br>
+                    <span class="success">  ✓</span> <span class="output">krita</span><br>
+                    <span class="success">  ✓</span> <span class="output">blender</span><br>
+                    <span class="success">  ✓</span> <span class="output">darktable</span><br>
+                    <span class="success">  ✓</span> <span class="output">kdenlive</span><br>
+                    <br>
+                    <span class="prompt">▸</span> <span class="cmd">bureau-ask</span> <span class="highlight">"resize all PNGs to 1200px wide"</span><br>
+                    <br>
+                    <span class="output">  mogrify -resize 1200x *.png</span><br>
+                    <br>
+                    <span class="prompt">▸</span> <span class="cmd">batch-to-webp</span><br>
+                    <span class="success">  ✓</span> <span class="output">Converted 24 images to WebP</span><br>
+                    <br>
+                    <span class="prompt">▸</span> <span class="cmd">bureau theme dark</span><br>
+                    <span class="success">  ✓</span> <span class="output">Switched to dark mode</span><br>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section class="philosophy">
+        <div class="reveal">
+            <blockquote>
+                "Form follows <span class="accent-red">function</span> — 
+                your OS should follow your <span class="accent-yellow">creativity</span>."
+            </blockquote>
+            <cite>— Bureau philosophy, after the Bauhaus school</cite>
+        </div>
+    </section>
+
+    <div class="bauhaus-stripe">
+        <div class="s-blue"></div>
+        <div class="s-yellow"></div>
+        <div class="s-red"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-left">
+            © 2026 Bureau · MIT Licence · Made for makers.
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/chrischrisjnr/bureau">GitHub</a>
+            <a href="https://claude.ai">Claude AI</a>
+            <a href="https://fedoraproject.org">Fedora</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Copy install command
+        function copyInstall() {
+            const cmd = 'bash <(curl -fsSL https://raw.githubusercontent.com/chrischrisjnr/bureau/main/install.sh)';
+            navigator.clipboard.writeText(cmd).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 2000);
+            });
+        }
+
+        // Scroll reveal animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
