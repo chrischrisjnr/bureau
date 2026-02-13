@@ -244,6 +244,47 @@ install_creative_suite() {
     sudo dnf install -y obs-studio
     success "OBS Studio installed"
 
+    substep "Preparing DaVinci Resolve"
+    # DaVinci Resolve requires manual download from Blackmagic (registration required)
+    # Install dependencies so it's ready to go once downloaded
+    sudo dnf install -y \
+        libxcrypt-compat mesa-libGLU alsa-lib apr apr-util \
+        libxkbcommon-x11 mesa-libOpenCL ocl-icd \
+        opencl-headers libXtst libXfixes \
+        2>/dev/null || true
+
+    mkdir -p "$HOME/.config/bureau"
+    cat > "$HOME/.config/bureau/davinci-resolve-setup.md" << 'DVEOF'
+# Installing DaVinci Resolve on Bureau
+
+DaVinci Resolve is free professional video editing & colour grading software.
+It requires a manual download because Blackmagic requires registration.
+
+## Steps
+
+1. Go to https://www.blackmagicdesign.com/products/davinciresolve
+2. Click "Free Download" → choose "DaVinci Resolve for Linux"
+3. Register (or log in) and download the .zip file
+4. Extract the zip:
+   ```
+   unzip DaVinci_Resolve_*_Linux.zip
+   ```
+5. Run the installer:
+   ```
+   sudo ./DaVinci_Resolve_*_Linux.run
+   ```
+6. Follow the installer prompts
+7. DaVinci Resolve will appear in your app drawer
+
+## Notes
+- Bureau has pre-installed all required dependencies
+- Free version includes editing, colour, Fairlight audio, and Fusion VFX
+- Studio version ($295 one-time) adds GPU acceleration, HDR, and more
+- For NVIDIA GPUs: install proprietary drivers for best performance
+- For AMD GPUs: the open-source drivers included in Fedora work well
+DVEOF
+    success "DaVinci Resolve dependencies installed (run 'bureau davinci' for setup guide)"
+
     substep "Installing ImageMagick (command-line image processing)"
     sudo dnf install -y ImageMagick
     success "ImageMagick installed"
@@ -440,7 +481,7 @@ configure_gnome() {
 
     # Dock / Dash
     gsettings set org.gnome.shell favorite-apps \
-        "['google-chrome.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Terminal.desktop', 'gimp.desktop', 'org.inkscape.Inkscape.desktop', 'org.kde.krita.desktop', 'org.blender.Blender.desktop', 'com.spotify.Client.desktop', 'com.discordapp.Discord.desktop', 'md.obsidian.Obsidian.desktop']"
+        "['google-chrome.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Terminal.desktop', 'bureau-claude.desktop', 'bureau-figma.desktop', 'bureau-miro.desktop', 'bureau-notion.desktop', 'gimp.desktop', 'org.inkscape.Inkscape.desktop', 'org.kde.krita.desktop', 'org.blender.Blender.desktop', 'com.spotify.Client.desktop', 'com.discordapp.Discord.desktop', 'md.obsidian.Obsidian.desktop']"
 
     success "GNOME settings applied"
 }
@@ -678,7 +719,37 @@ StartupWMClass=figma
 Keywords=design;ui;ux;figma;prototype;
 EOF
 
-    success "Claude.ai & Figma web apps created"
+    # --- Miro web app ---
+    cat > "$apps_dir/bureau-miro.desktop" << 'EOF'
+[Desktop Entry]
+Version=1.0
+Name=Miro
+Comment=Online Collaborative Whiteboard
+Exec=google-chrome-stable --app=https://miro.com --class=miro
+Icon=miro
+Terminal=false
+Type=Application
+Categories=Graphics;ProjectManagement;
+StartupWMClass=miro
+Keywords=whiteboard;miro;collaborate;brainstorm;
+EOF
+
+    # --- Notion web app ---
+    cat > "$apps_dir/bureau-notion.desktop" << 'EOF'
+[Desktop Entry]
+Version=1.0
+Name=Notion
+Comment=All-in-one Workspace
+Exec=google-chrome-stable --app=https://www.notion.so --class=notion
+Icon=notion
+Terminal=false
+Type=Application
+Categories=Office;ProjectManagement;
+StartupWMClass=notion
+Keywords=notion;notes;wiki;project;docs;
+EOF
+
+    success "Claude.ai, Figma, Miro & Notion web apps created"
 
     # --- Claude Code (terminal AI) ---
     substep "Installing Claude Code (terminal AI assistant)"
@@ -1050,6 +1121,7 @@ show_help() {
     echo -e "  ${YELLOW}bureau theme light${NC}    Switch to light mode"
     echo -e "  ${YELLOW}bureau ask \"...\"${NC}      Ask Claude AI a question"
     echo -e "  ${YELLOW}bureau affinity${NC}       Show Affinity setup guide"
+    echo -e "  ${YELLOW}bureau davinci${NC}       Show DaVinci Resolve setup guide"
     echo -e "  ${YELLOW}bureau extensions${NC}     Show recommended GNOME extensions"
     echo -e "  ${YELLOW}bureau info${NC}           Show system info"
     echo -e "  ${YELLOW}bureau help${NC}           Show this help"
@@ -1123,6 +1195,13 @@ case "${1:-help}" in
             less "$HOME/.config/bureau/affinity-setup.md"
         else
             cat "$HOME/.config/bureau/affinity-setup.md"
+        fi
+        ;;
+    davinci)
+        if command -v less &>/dev/null; then
+            less "$HOME/.config/bureau/davinci-resolve-setup.md"
+        else
+            cat "$HOME/.config/bureau/davinci-resolve-setup.md"
         fi
         ;;
     extensions)

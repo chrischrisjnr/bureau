@@ -38,16 +38,20 @@ That's it. One command. Go make a coffee — it'll take 15-20 minutes.
 | Krita | Digital painting & illustration | Procreate / Painter |
 | Blender | 3D modelling, animation & rendering | Cinema 4D / Maya |
 | Darktable | RAW photo processing | Lightroom |
+| DaVinci Resolve | Video editing & colour grading | Premiere Pro |
 | Scribus | Desktop publishing | InDesign |
-| Kdenlive | Video editing | Premiere Pro |
+| Kdenlive | Video editing (lightweight) | iMovie |
 | OBS Studio | Screen recording & streaming | — |
-| Figma | UI/UX design (web app) | Sketch / Figma |
+| Figma | UI/UX design (web app) | Sketch |
+| Miro | Collaborative whiteboard (web app) | FigJam |
 | ImageMagick | Command-line image processing | — |
 
 ### Everyday Apps
 - **Google Chrome** — default browser
 - **Spotify** — music (Flatpak)
 - **Discord** — community (Flatpak)
+- **Notion** — docs & project management (web app)
+- **Miro** — collaborative whiteboard (web app)
 - **Obsidian** — notes & knowledge base (Flatpak)
 - **LibreOffice** — documents, spreadsheets, presentations
 - **Telegram** — messaging (Flatpak)
@@ -88,6 +92,7 @@ bureau theme dark     Switch to dark mode
 bureau theme light    Switch to light mode
 bureau ask "..."      Ask Claude AI a question
 bureau affinity       Show Affinity setup guide
+bureau davinci        Show DaVinci Resolve setup guide
 bureau extensions     Show recommended GNOME extensions
 bureau info           Show system info
 ```
